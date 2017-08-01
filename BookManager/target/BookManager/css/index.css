@@ -1,0 +1,79 @@
+*{
+  padding:0;  
+  margin:0;
+}  
+.main{
+  width: auto;
+  height: auto;
+  margin:20px 200px;
+}
+.nav{
+  overflow: hidden;
+}
+.nav_left{
+  overflow: hidden;
+  height:150px;
+  width: 380px;
+  display: inline-block;
+}
+.nav_left img{
+  height: 120px;
+  width: 120px;
+  float: left;
+} 
+.nav_left span{
+  display: block;
+  color: black;
+  width: 380px;
+  text-align: center;
+  height: 80px;
+  margin-top: 40px;
+  font-size: 18px;
+  font-family: "微软雅黑";
+}
+.nav_right{
+  float: right;
+  height: 150px;
+}
+.nav_right p{
+  font-family: "微软雅黑";
+  width: 200px;
+  margin-top: 40px;
+  text-align: center;
+}
+.hide{
+  display:none;
+}  
+.contents{
+  border-top: 1px solid #333;
+  position: relative;
+  top: 5px;
+  overflow: hidden;
+} 
+.contents ul{
+  height: 70px;
+  list-style-type: none;
+}
+.contents ul li{
+  margin-top: 10px;
+  display: inline-block;
+  width: 8%;
+  text-align: center;
+  float: left;
+  cursor: pointer;
+}
+.contents div{
+  height: 200px;
+}
+.contents div img{
+  width: 70px;
+  height: 90px;
+  float: left;
+}
+.contents div p{
+  display: inline-block;
+  float: left;
+  height: 100px;
+  text-align: center;
+  width: 14%;
+}
