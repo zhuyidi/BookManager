@@ -22,7 +22,7 @@ public class Borrow_infoDaoImpl implements Borrow_infoDao {
     PreparedStatement statement = null;
 
     public void deleteBookById(int bookId) {
-        String sql = "update borrow_info set flag = " + 0 + "where book_id = " + bookId + ";";
+        String sql = "update borrow_info set flag = " + 0 + " where book_id = " + bookId + " ;";
         connection = DBUtils.getConnection();
         try {
             statement = connection.prepareStatement(sql);

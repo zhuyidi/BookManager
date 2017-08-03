@@ -191,11 +191,21 @@
                     <%
                       for(int i = 0; i < books.size(); i++){
                           book = books.get(i);
+                          String filepath = DaoFactory.getBookDaoInstance().getFilePath(book.getId());
+//                          System.out.printf("###%s\n", filepath);
                     %>
-                    <div class="books">
-                        <p>
-                            <img src="img/kernel.jpg">
-                        </p>
+                        <div class="books">
+                            <%
+                                if (filepath != null) {
+                            %>
+
+                            <p>
+                                <img src = <%=filepath%>>
+                            </p>
+
+                            <%
+                                }
+                            %>
                         <p><%=book.getName()%></p>
                         <p><%=book.getAuthor()%></p>
                         <p><%=book.getDescribe()%></p>
@@ -220,11 +230,21 @@
                 <%
                     for(int j = 0; j < books.size(); j++){
                         book = books.get(j);
+                        String filepath = DaoFactory.getBookDaoInstance().getFilePath(book.getId());
+                        System.out.printf("###%s\n", filepath);
                 %>
                     <div class="books">
+                        <%
+                            if (filepath != null) {
+                        %>
+
                         <p>
-                            <img src="img/kernel.jpg">
+                            <img src = <%=filepath%>>
                         </p>
+
+                        <%
+                            }
+                        %>
                         <p><%=book.getName()%></p>
                         <p><%=book.getAuthor()%></p>
                         <p><%=book.getDescribe()%></p>

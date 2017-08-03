@@ -19,13 +19,28 @@ public interface BookDao {
     //查询操作
     //书名|作者|所属者模糊查询
     public List<Book> queryByNAO(String keyWords);
+
+    //通过书本ID进行查询操作
     public Book queryById(int bookId);
+
+    //查找所有的书籍
     public List<Book> queryAllBook();
+
+    //查询一个一级标签下的所有书
     public List<Book> queryByFatherClassId(int fatherClassId);
+
+    //查询一个用户所拥有的所有书
     public List<Book> queryByOwner(String owner);
+
+    //查询一个用户所借的所有书
     public List<Book> queryMyBorrowBooks(String username);
+
+    //通过ID删除一本书
     public void deleteById(int id);
+
+    //书的数量+1
     public void addBookAmount(int id);
+
     //通过书本名与归属者查询书本唯一ID
     public int queryBookIdByBookNameAndOwner(String bookName, String owner);
 
@@ -34,4 +49,7 @@ public interface BookDao {
 
     //通过书本Id将书本总数进行加一
     public void updateAmountById(int bookId);
+
+    //得到本书所属图片的路径
+    public String getFilePath(int bookId);
 }

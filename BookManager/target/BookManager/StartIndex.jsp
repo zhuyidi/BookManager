@@ -113,7 +113,7 @@
     </style>
 
 
-    <body onload="goPage(1, 10);">
+    <body>
 
     <%
 //        String logout = "0";
@@ -137,7 +137,7 @@
                         <a href="javascript:showDialog();">登录</a>
                     </div>
                     <div>
-                        <form action="/search.do?mark=0" method="post">
+                        <form action="javascript:showDialog();" method="post">
                             <input type="text" name="keyWords" placeholder="书名/作者/归属者" ></input>
                             <input type="submit" value="搜索">
                         </form>
@@ -172,7 +172,7 @@
                     <h4>
                         <p>
                             <br>
-                            <a href="allBook_class.jsp" style="color: #535353">全部标签</a>
+                            <a href="javascript:showDialog();" style="color: #535353">全部标签</a>
                         </p>
                     </h4>
 
@@ -202,7 +202,7 @@
                         <p><%=book.getOwner()%></p>
                         <p>被借:<%=book.getBorrow_num()%>次</p>
                         <form action="javascript:showDialog();" method="post">
-                            <input type="submit" value="我要借阅"></input>
+                            <input type="submit" value="点我借阅"></input>
                         </form>
 
                     </div>
@@ -230,7 +230,9 @@
                         <p><%=book.getDescribe()%></p>
                         <p><%=book.getOwner()%></p>
                         <p>被借:<%=book.getBorrow_num()%>次</p>
-                        <button>我要借阅</button>
+                        <form action="javascript:showDialog();" method="post">
+                            <input type="submit" value="点我借阅"></input>
+                        </form>
                     </div>
                     <%
                             }
@@ -435,58 +437,6 @@
             alert("登录失败！用户名或密码不正确！");
             showDialog();
         }
-
-
-
-        function goPage(pno,psize){
-            var itable = document.getElementsByClassName("bts");
-            var num = itable.length;//表格所有行数(所有记录数)
-            console.log(num);
-            var totalPage = 0;//总页数
-            var pageSize = psize;//每页显示行数
-            //总共分几页
-            if(num/pageSize > parseInt(num/pageSize)){
-                totalPage=parseInt(num/pageSize)+1;
-            }else{
-                totalPage=parseInt(num/pageSize);
-            }
-            var currentPage = pno;//当前页数
-            var startRow = (currentPage - 1) * pageSize+1;//开始显示的行  31
-            var endRow = currentPage * pageSize;//结束显示的行   40
-            endRow = (endRow > num)? num : endRow;    40
-            console.log(endRow);
-            //遍历显示数据实现分页
-            for(var i=1;i<(num+1);i++){
-                var irow = itable.rows[i-1];
-                if(i>=startRow && i<=endRow){
-                    irow.style.display = "block";
-                }else{
-                    irow.style.display = "none";
-                }
-            }
-            var pageEnd = document.getElementById("pageEnd");
-            var tempStr = "共"+num+"条记录 分"+totalPage+"页 当前第"+currentPage+"页";
-            if(currentPage>1){
-                tempStr += "<a href=\"#\" onClick=\"goPage("+(1)+","+psize+")\">首页</a>";
-                tempStr += "<a href=\"#\" onClick=\"goPage("+(currentPage-1)+","+psize+")\"><上一页</a>"
-            }else{
-                tempStr += "首页";
-                tempStr += "<上一页";
-            }
-
-            if(currentPage<totalPage){
-                tempStr += "<a href=\"#\" onClick=\"goPage("+(currentPage+1)+","+psize+")\">下一页></a>";
-                tempStr += "<a href=\"#\" onClick=\"goPage("+(totalPage)+","+psize+")\">尾页</a>";
-            }else{
-                tempStr += "下一页>";
-                tempStr += "尾页";
-            }
-
-            document.getElementById("barcon").innerHTML = tempStr;
-
-        }
-
-
 
     </script>
 </html>

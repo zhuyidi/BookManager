@@ -74,11 +74,20 @@
             Iterator<Book> bookIterator = books.iterator();
             while (bookIterator.hasNext()){
                 book = bookIterator.next();
+                String filepath = DaoFactory.getBookDaoInstance().getFilePath(book.getId());
             %>
             <div class="books">
+                <%
+                    if (filepath != null) {
+                %>
+
                 <p>
-                    <img src="img/kernel.jpg">
+                    <img src = <%=filepath%>>
                 </p>
+
+                <%
+                    }
+                %>
                 <p><%=book.getName()%></p>
                 <p><%=book.getAuthor()%></p>
                 <p><%=book.getDescribe()%></p>

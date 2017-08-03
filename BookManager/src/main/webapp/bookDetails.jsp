@@ -133,9 +133,24 @@
         </div>
     </div>
 
+    <%
+        int bookid = Integer.parseInt(new String(request.getParameter("bookid").getBytes("iso-8859-1"),"utf-8"));
+        String filepath = DaoFactory.getBookDaoInstance().getFilePath(bookid);
+    %>
+
     <div id = "contents" style="width: 800px;height: 250px">
         <div id="left" style="float: left; width: 50%; height: 40%;">
-            <img src="img/kernel.jpg" width="300" height="220">
+            <%
+                if (filepath != null) {
+            %>
+
+            <p>
+                <img src = <%=filepath%> width="180" height="250">
+            </p>
+
+            <%
+                }
+            %>
         </div>
 
         <form action="/addComments.do" method="post">
@@ -144,7 +159,6 @@
         <div id = "right" style="float: left; width: 50%; height: 40%;">
 
             <%
-                int bookid = Integer.parseInt(new String(request.getParameter("bookid").getBytes("iso-8859-1"),"utf-8"));
                 System.out.println(bookid);
                 List<Book_comments> commentss = new ArrayList<Book_comments>();
                 List<User> users = new ArrayList<User>();

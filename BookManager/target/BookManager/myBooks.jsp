@@ -181,11 +181,20 @@
                     List<Book> books = DaoFactory.getBookDaoInstance().queryByOwner(username);
                     for(int i = 0; i < books.size(); i++){
                         book = books.get(i);
+                        String filepath = DaoFactory.getBookDaoInstance().getFilePath(book.getId());
                 %>
                     <div class="books">
+                        <%
+                            if (filepath != null) {
+                        %>
+
                         <p>
-                            <img src="img/kernel.jpg">
+                            <img src = <%=filepath%>>
                         </p>
+
+                        <%
+                            }
+                        %>
                         <p><%=book.getName()%></p>
                         <p><%=book.getAuthor()%></p>
                         <p><%=book.getDescribe()%></p>
@@ -212,11 +221,21 @@
                     borrowBooks = DaoFactory.getBookDaoInstance().queryMyBorrowBooks(username);
                     for(int i = 0; i < borrowBooks.size(); i++){
                         book1 = borrowBooks.get(i);
+                        String filepath = DaoFactory.getBookDaoInstance().getFilePath(book1.getId());
+
                 %>
                     <div class="books">
+                        <%
+                            if (filepath != null) {
+                        %>
+
                         <p>
-                            <img src="img/kernel.jpg">
+                            <img src = <%=filepath%>>
                         </p>
+
+                        <%
+                            }
+                        %>
                         <p><%=book1.getName()%></p>
                         <p><%=book1.getAuthor()%></p>
                         <p><%=book1.getDescribe()%></p>

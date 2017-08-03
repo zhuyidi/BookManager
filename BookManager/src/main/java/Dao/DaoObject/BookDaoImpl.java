@@ -6,9 +6,12 @@ import Dao.ValueObject.Book;
 import Model.DealKeywords;
 import org.apache.commons.lang.StringEscapeUtils;
 
+import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.System.out;
 
 /**
  * Created by dela on 7/21/17.
@@ -68,7 +71,7 @@ public class BookDaoImpl implements BookDao {
         connection = DBUtils.getConnection();
         try {
             statement = connection.prepareStatement(sql);
-            System.out.println(sql);
+            out.println(sql);
             statement.executeUpdate();
 
             DBUtils.close(resultSet, statement, connection);
@@ -83,7 +86,7 @@ public class BookDaoImpl implements BookDao {
         keyWords = DealKeywords.dealKeyWords(keyWords);
         String sql = "select * from book_info where (owner like '" + keyWords + "' or name like '"
                 + keyWords + "' or author like '" + keyWords + "') and amount > 0;";
-        System.out.println(sql);
+        out.println(sql);
         List<Book> books = new ArrayList<Book>();
         Book book = null;
         connection = DBUtils.getConnection();
@@ -103,7 +106,7 @@ public class BookDaoImpl implements BookDao {
                 books.add(book);
             }
 
-            System.out.printf("bookDAO里模糊查询的结果有%d条\n", books.size());
+            out.printf("bookDAO里模糊查询的结果有%d条\n", books.size());
             DBUtils.close(resultSet, statement, connection);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -116,7 +119,7 @@ public class BookDaoImpl implements BookDao {
         List<Book> books = new ArrayList<Book>();
         Book book = null;
         String sql = "select * from book_info where id = " + bookId  + ";";
-        System.out.println(sql);
+        out.println(sql);
         connection = DBUtils.getConnection();
         try {
             statement = connection.prepareStatement(sql);
@@ -237,7 +240,7 @@ public class BookDaoImpl implements BookDao {
         connection = DBUtils.getConnection();
         try {
             statement = connection.prepareStatement(sql);
-            System.out.println(sql);
+            out.println(sql);
             resultSet = statement.executeQuery();
             while (resultSet.next()){
                 book = new Book();
@@ -261,7 +264,7 @@ public class BookDaoImpl implements BookDao {
 
     public void deleteById(int id){
         String sql = "delete from book_info where id =" + id +";";
-        System.out.println(sql);
+        out.println(sql);
         sql = StringEscapeUtils.escapeSql(sql);
         connection = DBUtils.getConnection();
         try {
@@ -277,7 +280,7 @@ public class BookDaoImpl implements BookDao {
     public void addBookAmount(int id){
         Book book = queryById(id);
         String sql = "update book_info set amount = " + (book.getAmount()+1) + " where id = " + id + ";";
-        System.out.println(sql);
+        out.println(sql);
         connection = DBUtils.getConnection();
         try {
             statement = connection.prepareStatement(sql);
@@ -295,7 +298,7 @@ public class BookDaoImpl implements BookDao {
         owner = StringEscapeUtils.escapeSql(owner);
         String sql = "SELECT id FROM book_info WHERE " +
                 "name = '" + bookName + "' AND owner = '" + owner + "';";
-        System.out.println(sql);
+        out.println(sql);
         connection = DBUtils.getConnection();
         try {
             statement = connection.prepareStatement(sql);
@@ -313,7 +316,7 @@ public class BookDaoImpl implements BookDao {
     public void updateBorrowInfoById(int bookId) {
         String sql = "UPDATE book_info SET borrow_num = borrow_num+1, amount = amount-1 " +
                 "WHERE id = " + bookId;
-        System.out.println(sql);
+        out.println(sql);
         connection = DBUtils.getConnection();
 
         try {
@@ -341,4 +344,25 @@ public class BookDaoImpl implements BookDao {
         }
     }
 
+    //根据bookid得到图片路径
+    public String getFilePath(int bookId) {
+//        String pathname = "/home/hg_yi/Web项目/BookManager/BookManager" +
+//                "/src/main/webapp/BookManager_Picture/";
+        String pathname = "/home/dela/IdeaProjects/BookManager/src/main/webapp/BookPic/";
+        File file = new File(pathname);
+        String bookid = Integer.toString(bookId);
+
+        String[] filenames = file.list();
+        for (String filename : filenames) {
+            String filenameTemp = filename.substring(0, filename.indexOf("."));
+            out.println(filenameTemp);
+            if (filenameTemp.equals(bookid)) {
+                out.println("$$$$");
+                out.println(filename);
+                return "/BookPic/" + filename;
+            }
+        }
+
+        return null;
+    }
 }

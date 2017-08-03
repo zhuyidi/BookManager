@@ -13,17 +13,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import java.io.*;
-
-import static java.lang.System.out;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by hg_yi on 17-7-26.
  */
 
 @MultipartConfig
-@WebServlet("/uploadBook.do")
-public class UpLoadBook extends HttpServlet {
+//@WebServlet("/uploadBook.do")
+public class TestUpLoadBook extends HttpServlet {
     private final String SUCCESS_PAGE = "myBooks.jsp";
     private final String FAILD_PAGE = "faild.jsp";
 
@@ -37,17 +38,22 @@ public class UpLoadBook extends HttpServlet {
         String upload_date = Date.getCurrentTime();
         String describe = new String(request.getParameter("describe").getBytes("iso-8859-1"), "utf-8");
         String one = new String(request.getParameter("one").getBytes("iso-8859-1"), "utf-8");
-        out.println(one);
+        System.out.println(one);
 
         //根据用户输入的标签名在book_class中找到对应的标签id
         String[] two = request.getParameterValues("two");
         int[] classId = new int[two.length];
         for(int i = 0; i < two.length; i++){
             two[i] = new String(two[i].getBytes("iso-8859-1"), "utf-8");
-            out.printf("two:%s\n", two[i]);
+            System.out.printf("two:%s\n", two[i]);
             classId[i] = DaoFactory.getBook_classDaoInstance().queryIdByName(two[i]);
-            out.printf("twoid:%d\n", classId[i]);
+            System.out.printf("twoid:%d\n", classId[i]);
         }
+
+
+        Part part = request.getPart("photo");
+        String fileName = getFileName(part);
+        writeTo(fileName, part);
 
         //将标签分割，得到一个String数组
         Book book = new Book();
@@ -70,59 +76,28 @@ public class UpLoadBook extends HttpServlet {
             DaoFactory.getBook_class_relationDAOInstance().insert(classId[i], bookId);
         }
 
-        //以bookId为文件名，在适合路径下建立存储照片的文件夹名
-        Part part = request.getPart("photo");
-        //取得文件格式
-        String fileSuffix = getFileName(part);
-        writeTo(bookId, fileSuffix, part);
-
         request.getRequestDispatcher(SUCCESS_PAGE).forward(request, response);
     }
 
     private String getFileName(Part part){
         String header = part.getHeader("Content-Disposition");
-        //得到文件名
         String fileName = header.substring(header.indexOf("filename=\"") + 10,
                 header.lastIndexOf("\""));
-        //取得文件格式
-        String suffix = fileName.substring(fileName.indexOf("."), fileName.length());
-        out.println(suffix);
-
-        return suffix;
+        return fileName;
     }
 
-    private void writeTo(int bookId, String fileSuffix, Part part)
-            throws IOException {
+    private void writeTo(String fileName, Part part)
+            throws IOException, FileNotFoundException {
         InputStream in = part.getInputStream();
+        FileOutputStream out = new FileOutputStream("/home/dela/test/ServletTest/" + fileName);
+        byte[] buffer = new byte[1024];
+        int length = -1;
 
-//        String filepath = "/home/hg_yi/Web项目/BookManager/BookManager/src/main" +
-//                "/webapp/BookManager_Picture/" +  bookId + fileSuffix;
-
-        String filepath = "/home/dela/IdeaProjects/BookManager/src/main/webapp/BookPic/" + bookId + fileSuffix;
-
-        //创建文件
-        createFile(filepath);
-        FileOutputStream out = new FileOutputStream(filepath);
-
-        byte[] buffer = new byte[4096];
-        int length;
-        while ((length = in.read(buffer)) != -1) {
+        while ((length = in.read(buffer)) != -1){
             out.write(buffer, 0, length);
         }
-
         in.close();
         out.close();
     }
 
-    private void createFile(String filepath) {
-        File file = new File(filepath);
-
-        try {
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
